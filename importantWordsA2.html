@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German A2 Vocabulary Learning</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .category {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category h3 {
+            color: #1e3c72;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e8eaf6;
+            padding-bottom: 0.5rem;
+        }
+        
+        .vocab-list {
+            list-style-type: none;
+        }
+        
+        .vocab-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .vocab-item:last-child {
+            border-bottom: none;
+        }
+        
+        .german {
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        
+        .learning-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            color: #1e3c72;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .flashcard {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            margin: 0 auto 2rem;
+        }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flashcard-front {
+            background-color: #1e3c72;
+            color: white;
+        }
+        
+        .flashcard-back {
+            background-color: #f5f7fa;
+            color: #333;
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-word {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .flashcard-hint {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: #1e3c72;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #2a5298;
+        }
+        
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .quiz-question {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .quiz-option {
+            background-color: #f0f2f5;
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e4e8f0;
+        }
+        
+        .quiz-option.correct {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            background-color: #1e3c72;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .flashcard-word {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>German A2 Vocabulary Learning</h1>
+        <p class="subtitle">Essential words for elementary level based on CEFR and Goethe-Institut standards</p>
+    </header>
+    
+    <div class="container">
+        <div class="categories">
+            <div class="category" onclick="showCategory('work')">
+                <h3>Arbeit und Beruf</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">der Beruf</span> - profession, job</li>
+                    <li class="vocab-item"><span class="german">der Kollege</span> - colleague (male)</li>
+                    <li class="vocab-item"><span class="german">die Chefin</span> - boss (female)</li>
+                    <li class="vocab-item"><span class="german">das Gehalt</span> - salary</li>
+                </ul>
+            </div>
+            
+            <div class="category" onclick="showCategory('health')">
+                <h3>Gesundheit und Körper</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">der Körper</span> - body</li>
+                    <li class="vocab-item"><span class="german">krank</span> - sick, ill</li>
+                    <li class="vocab-item"><span class="german">gesund</span> - healthy</li>
+                    <li class="vocab-item"><span class="german">der Arzt</span> - doctor (male)</li>
+                </ul>
+            </div>
+            
+            <div class="category" onclick="showCategory('living')">
+                <h3>Wohnen</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">die Wohnung</span> - apartment</li>
+                    <li class="vocab-item"><span class="german">die Miete</span> - rent</li>
+                    <li class="vocab-item"><span class="german">die Küche</span> - kitchen</li>
+                    <li class="vocab-item"><span class="german">die Möbel</span> - furniture</li>
+                </ul>
+            </div>
+            
+            <div class="category" onclick="showCategory('travel')">
+                <h3>Unterwegs und Reisen</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">die Reise</span> - trip, journey</li>
+                    <li class="vocab-item"><span class="german">der Urlaub</span> - vacation, holiday</li>
+                    <li class="vocab-item"><span class="german">der Koffer</span> - suitcase</li>
+                    <li class="vocab-item"><span class="german">die Sehenswürdigkeit</span> - sight, tourist attraction</li>
+                </ul>
+            </div>
+            
+            <div class="category" onclick="showCategory('clothing')">
+                <h3>Kleidung</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">die Kleidung</span> - clothing</li>
+                    <li class="vocab-item"><span class="german">die Jacke</span> - jacket</li>
+                    <li class="vocab-item"><span class="german">die Hose</span> - trousers, pants</li>
+                    <li class="vocab-item"><span class="german">tragen</span> - to wear</li>
+                </ul>
+            </div>
+            
+            <div class="category" onclick="showCategory('freetime')">
+                <h3>Alltag und Freizeit</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">der Alltag</span> - everyday life</li>
+                    <li class="vocab-item"><span class="german">die Freizeit</span> - free time</li>
+                    <li class="vocab-item"><span class="german">das Hobby</span> - hobby</li>
+                    <li class="vocab-item"><span class="german">feiern</span> - to celebrate</li>
+                </ul>
+            </div>
+            
+            <div class="category" onclick="showCategory('verbs')">
+                <h3>Wichtige Verben</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">anrufen</span> - to call</li>
+                    <li class="vocab-item"><span class="german">bekommen</span> - to receive, to get</li>
+                    <li class="vocab-item"><span class="german">besuchen</span> - to visit</li>
+                    <li class="vocab-item"><span class="german">verstehen</span> - to understand</li>
+                </ul>
+            </div>
+            
+            <div class="category" onclick="showCategory('adjectives')">
+                <h3>Adjektive und Adverbien</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">einfach</span> - easy</li>
+                    <li class="vocab-item"><span class="german">schwierig</span> - difficult</li>
+                    <li class="vocab-item"><span class="german">billig</span> - cheap</li>
+                    <li class="vocab-item"><span class="german">wichtig</span> - important</li>
+                </ul>
+            </div>
+            
+            <div class="category" onclick="showCategory('conjunctions')">
+                <h3>Konjunktionen und Präpositionen</h3>
+                <ul class="vocab-list">
+                    <li class="vocab-item"><span class="german">aber</span> - but</li>
+                    <li class="vocab-item"><span class="german">weil</span> - because</li>
+                    <li class="vocab-item"><span class="german">dass</span> - that</li>
+                    <li class="vocab-item"><span class="german">trotzdem</span> - nevertheless</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="learning-section">
+            <h2 class="section-title" id="current-category">Flashcards</h2>
+            
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <div class="flashcard-word" id="german-word">der Beruf</div>
+                        <div class="flashcard-hint">Click to see translation</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-word" id="english-word">profession, job</div>
+                        <div class="flashcard-hint">Click to see German</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="previousCard()">Previous</button>
+                <button onclick="nextCard()">Next</button>
+                <button onclick="shuffleCards()">Shuffle</button>
+                <button onclick="startQuiz()">Start Quiz</button>
+            </div>
+            
+            <div class="quiz-container" id="quiz-container" style="display: none;">
+                <div class="score" id="score">Score: 0/0</div>
+                <div class="quiz-question" id="quiz-question">What is the English translation of 'der Beruf'?</div>
+                <div class="quiz-options" id="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(0)">profession, job</div>
+                    <div class="quiz-option" onclick="checkAnswer(1)">colleague</div>
+                    <div class="quiz-option" onclick="checkAnswer(2)">boss</div>
+                    <div class="quiz-option" onclick="checkAnswer(3)">salary</div>
+                </div>
+                <div class="controls">
+                    <button onclick="exitQuiz()">Exit Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>German A2 Vocabulary Learning App - Based on CEFR and Goethe-Institut standards</p>
+    </footer>
+
+    <script>
+        // Vocabulary data organized by categories
+        const vocabulary = {
+            work: [
+                { german: "der Beruf", english: "profession, job" },
+                { german: "der Kollege / die Kollegin", english: "colleague (male/female)" },
+                { german: "der Chef / die Chefin", english: "boss (male/female)" },
+                { german: "die Firma / das Unternehmen", english: "company, business" },
+                { german: "das Büro", english: "office" },
+                { german: "der Termin", english: "appointment, meeting" },
+                { german: "die Besprechung", english: "meeting" },
+                { german: "die Bewerbung", english: "application" },
+                { german: "der Lebenslauf", english: "resume, CV" },
+                { german: "das Gehalt", english: "salary" },
+                { german: "die Arbeit (als...)", english: "to work (as...)" },
+                { german: "arbeitslos", english: "unemployed" },
+                { german: "die Ausbildung", english: "training, apprenticeship" },
+                { german: "die Stelle", english: "position, job opening" }
+            ],
+            health: [
+                { german: "der Körper", english: "body" },
+                { german: "der Kopf", english: "head" },
+                { german: "der Arm / der Fuß", english: "arm / foot" },
+                { german: "die Hand / das Bein", english: "hand / leg" },
+                { german: "der Bauch", english: "stomach, belly" },
+                { german: "der Rücken", english: "back" },
+                { german: "die Gesundheit", english: "health" },
+                { german: "krank", english: "sick, ill" },
+                { german: "gesund", english: "healthy" },
+                { german: "der Schmerz / die Schmerzen", english: "pain / pains" },
+                { german: "das Fieber", english: "fever" },
+                { german: "der Arzt / die Ärztin", english: "doctor (male/female)" },
+                { german: "das Krankenhaus", english: "hospital" },
+                { german: "die Apotheke", english: "pharmacy" },
+                { german: "das Medikament", english: "medicine" },
+                { german: "das Rezept", english: "prescription" },
+                { german: "sich fühlen", english: "to feel" },
+                { german: "wehtun", english: "to hurt" }
+            ],
+            living: [
+                { german: "die Wohnung", english: "apartment" },
+                { german: "das Haus", english: "house" },
+                { german: "der Mieter / die Mieterin", english: "tenant (male/female)" },
+                { german: "der Vermieter / die Vermieterin", english: "landlord / landlady" },
+                { german: "die Miete", english: "rent" },
+                { german: "die Nebenkosten", english: "utilities, additional costs" },
+                { german: "der Stock / die Etage", english: "floor, level" },
+                { german: "das Zimmer", english: "room" },
+                { german: "die Küche", english: "kitchen" },
+                { german: "das Bad / Badezimmer", english: "bathroom" },
+                { german: "das Schlafzimmer", english: "bedroom" },
+                { german: "das Wohnzimmer", english: "living room" },
+                { german: "der Balkon", english: "balcony" },
+                { german: "der Garten", english: "garden" },
+                { german: "die Möbel (plural)", english: "furniture" },
+                { german: "der Tisch / der Stuhl", english: "table / chair" },
+                { german: "das Bett / der Schrank", english: "bed / wardrobe, closet" },
+                { german: "umziehen", english: "to move (house)" }
+            ],
+            travel: [
+                { german: "die Reise", english: "trip, journey" },
+                { german: "der Urlaub", english: "vacation, holiday" },
+                { german: "das Ausland", english: "abroad" },
+                { german: "der Koffer", english: "suitcase" },
+                { german: "der Pass", english: "passport" },
+                { german: "das Flugticket / die Fahrkarte", english: "plane ticket / ticket (bus, train)" },
+                { german: "der Abflug / die Ankunft", english: "departure / arrival" },
+                { german: "die Haltestelle", english: "bus/tram stop" },
+                { german: "der Bahnsteig", english: "platform (train)" },
+                { german: "das Gleis", english: "track (train)" },
+                { german: "buchen / reservieren", english: "to book / to reserve" },
+                { german: "übernachten", english: "to stay overnight" },
+                { german: "die Jugendherberge", english: "youth hostel" },
+                { german: "die Sehenswürdigkeit", english: "sight, tourist attraction" },
+                { german: "der Weg", english: "way, path" },
+                { german: "links / rechts / geradeaus", english: "left / right / straight ahead" },
+                { german: "die Wegbeschreibung", english: "directions" }
+            ],
+            clothing: [
+                { german: "die Kleidung", english: "clothing" },
+                { german: "die Jacke", english: "jacket" },
+                { german: "der Mantel", english: "coat" },
+                { german: "der Pullover", english: "sweater, pullover" },
+                { german: "das Hemd / die Bluse", english: "shirt / blouse" },
+                { german: "die Hose", english: "trousers, pants" },
+                { german: "der Rock", english: "skirt" },
+                { german: "das Kleid", english: "dress" },
+                { german: "die Schuhe", english: "shoes" },
+                { german: "tragen", english: "to wear" },
+                { german: "anziehen / ausziehen", english: "to put on / to take off (clothing)" }
+            ],
+            freetime: [
+                { german: "der Alltag", english: "everyday life" },
+                { german: "die Freizeit", english: "free time" },
+                { german: "das Hobby", english: "hobby" },
+                { german: "ausgehen", english: "to go out" },
+                { german: "treffen (sich mit Freunden)", english: "to meet (up with friends)" },
+                { german: "einladen", english: "to invite" },
+                { german: "die Einladung", english: "invitation" },
+                { german: "die Party / das Fest", english: "party / celebration" },
+                { german: "feiern", english: "to celebrate" },
+                { german: "das Geschenk", english: "gift, present" },
+                { german: "der Verein", english: "club, association" },
+                { german: "Sport machen / treiben", english: "to do sports" },
+                { german: "fernsehen", english: "to watch TV" },
+                { german: "die Zeitung", english: "newspaper" },
+                { german: "die Zeitschrift", english: "magazine" }
+            ],
+            verbs: [
+                { german: "anrufen", english: "to call (on the phone)" },
+                { german: "bekommen", english: "to receive, to get" },
+                { german: "bestellen", english: "to order" },
+                { german: "besuchen", english: "to visit" },
+                { german: "bezahlen", english: "to pay" },
+                { german: "bleiben", english: "to stay" },
+                { german: "bringen", english: "to bring" },
+                { german: "denken", english: "to think" },
+                { german: "erklären", english: "to explain" },
+                { german: "erzählen", english: "to tell, narrate" },
+                { german: "finden", english: "to find" },
+                { german: "glauben", english: "to believe" },
+                { german: "helfen", english: "to help" },
+                { german: "hoffen", english: "to hope" },
+                { german: "kennenlernen", english: "to get to know" },
+                { german: "mitbringen", english: "to bring along" },
+                { german: "nehmen", english: "to take" },
+                { german: "passieren", english: "to happen" },
+                { german: "versuchen", english: "to try" },
+                { german: "verstehen", english: "to understand" },
+                { german: "warten (auf + Akk)", english: "to wait (for)" },
+                { german: "wissen", english: "to know (a fact)" },
+                { german: "wünschen", english: "to wish" },
+                { german: "zeigen", english: "to show" },
+                { german: "sich anziehen", english: "to get dressed" },
+                { german: "sich freuen (auf/über)", english: "to look forward to / be happy about" },
+                { german: "sich interessieren (für)", english: "to be interested (in)" },
+                { german: "sich treffen", english: "to meet up" }
+            ],
+            adjectives: [
+                { german: "einfach / schwierig", english: "easy / difficult" },
+                { german: "billig / teuer", english: "cheap / expensive" },
+                { german: "schnell / langsam", english: "fast / slow" },
+                { german: "laut / leise", english: "loud / quiet" },
+                { german: "hell / dunkel", english: "bright, light / dark" },
+                { german: "warm / kalt", english: "warm / cold" },
+                { german: "schön / hässlich", english: "beautiful / ugly" },
+                { german: "interessant / langweilig", english: "interesting / boring" },
+                { german: "lustig / traurig", english: "funny / sad" },
+                { german: "glücklich / unglücklich", english: "happy, lucky / unhappy, unlucky" },
+                { german: "frei", english: "free" },
+                { german: "besetzt", english: "occupied" },
+                { german: "müde", english: "tired" },
+                { german: "wichtig", english: "important" },
+                { german: "pünktlich", english: "punctual" },
+                { german: "höflich", english: "polite" }
+            ],
+            conjunctions: [
+                { german: "aber", english: "but" },
+                { german: "oder", english: "or" },
+                { german: "und", english: "and" },
+                { german: "denn", english: "because (main clause)" },
+                { german: "weil", english: "because (subordinate clause)" },
+                { german: "dass", english: "that" },
+                { german: "wenn", english: "if, when" },
+                { german: "als", english: "when (past, single event)" },
+                { german: "deshalb / darum", english: "therefore, that's why" },
+                { german: "trotzdem", english: "nevertheless, despite that" },
+                { german: "für", english: "for" },
+                { german: "mit", english: "with" },
+                { german: "ohne", english: "without" },
+                { german: "nach", english: "after, to" },
+                { german: "seit", english: "since, for (time)" },
+                { german: "von", english: "from, of" },
+                { german: "zu", english: "to, at" },
+                { german: "bei", english: "at, near" },
+                { german: "zwischen", english: "between" },
+                { german: "über", english: "over, about" },
+                { german: "unter", english: "under" },
+                { german: "vor", english: "in front of, before" },
+                { german: "hinter", english: "behind" }
+            ]
+        };
+
+        let currentCategory = 'work';
+        let currentCardIndex = 0;
+        let quizActive = false;
+        let score = { correct: 0, total: 0 };
+        let currentQuestion = null;
+
+        // Initialize the app with the first category
+        window.onload = function() {
+            showCategory('work');
+        };
+
+        function showCategory(category) {
+            currentCategory = category;
+            currentCardIndex = 0;
+            updateCard();
+            
+            // Update the category title
+            const categoryTitles = {
+                work: "Arbeit und Beruf",
+                health: "Gesundheit und Körper",
+                living: "Wohnen",
+                travel: "Unterwegs und Reisen",
+                clothing: "Kleidung",
+                freetime: "Alltag und Freizeit",
+                verbs: "Wichtige Verben",
+                adjectives: "Adjektive und Adverbien",
+                conjunctions: "Konjunktionen und Präpositionen"
+            };
+            
+            document.getElementById('current-category').textContent = categoryTitles[category];
+            
+            // Hide quiz if it's active
+            if (quizActive) {
+                exitQuiz();
+            }
+        }
+
+        function updateCard() {
+            const card = vocabulary[currentCategory][currentCardIndex];
+            document.getElementById('german-word').textContent = card.german;
+            document.getElementById('english-word').textContent = card.english;
+            
+            // Reset card to front side
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % vocabulary[currentCategory].length;
+            updateCard();
+        }
+
+        function previousCard() {
+            currentCardIndex = (currentCardIndex - 1 + vocabulary[currentCategory].length) % vocabulary[currentCategory].length;
+            updateCard();
+        }
+
+        function shuffleCards() {
+            // Fisher-Yates shuffle algorithm
+            for (let i = vocabulary[currentCategory].length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [vocabulary[currentCategory][i], vocabulary[currentCategory][j]] = 
+                [vocabulary[currentCategory][j], vocabulary[currentCategory][i]];
+            }
+            currentCardIndex = 0;
+            updateCard();
+        }
+
+        function startQuiz() {
+            quizActive = true;
+            document.getElementById('quiz-container').style.display = 'block';
+            score = { correct: 0, total: 0 };
+            updateScore();
+            generateQuestion();
+        }
+
+        function exitQuiz() {
+            quizActive = false;
+            document.getElementById('quiz-container').style.display = 'none';
+        }
+
+        function generateQuestion() {
+            const category = vocabulary[currentCategory];
+            const correctIndex = Math.floor(Math.random() * category.length);
+            const correctAnswer = category[correctIndex];
+            
+            // Get three random wrong answers from the same category
+            let wrongAnswers = [];
+            while (wrongAnswers.length < 3) {
+                const randomIndex = Math.floor(Math.random() * category.length);
+                if (randomIndex !== correctIndex && !wrongAnswers.includes(category[randomIndex])) {
+                    wrongAnswers.push(category[randomIndex]);
+                }
+            }
+            
+            // Combine and shuffle answers
+            let allAnswers = [correctAnswer, ...wrongAnswers];
+            for (let i = allAnswers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allAnswers[i], allAnswers[j]] = [allAnswers[j], allAnswers[i]];
+            }
+            
+            // Determine question type (German to English or English to German)
+            const questionType = Math.random() > 0.5 ? 'germanToEnglish' : 'englishToGerman';
+            
+            if (questionType === 'germanToEnglish') {
+                document.getElementById('quiz-question').textContent = 
+                    `What is the English translation of '${correctAnswer.german}'?`;
+            } else {
+                document.getElementById('quiz-question').textContent = 
+                    `What is the German translation of '${correctAnswer.english}'?`;
+            }
+            
+            // Update answer options
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            allAnswers.forEach((answer, index) => {
+                const option = document.createElement('div');
+                option.className = 'quiz-option';
+                option.textContent = questionType === 'germanToEnglish' ? answer.english : answer.german;
+                option.onclick = function() {
+                    checkAnswer(index, answer === correctAnswer, allAnswers, correctAnswer);
+                };
+                optionsContainer.appendChild(option);
+            });
+            
+            currentQuestion = {
+                correctAnswer: correctAnswer,
+                questionType: questionType,
+                allAnswers: allAnswers
+            };
+        }
+
+        function checkAnswer(index, isCorrect, allAnswers, correctAnswer) {
+            if (!isCorrect) {
+                // Find the correct answer if not provided
+                isCorrect = allAnswers[index] === correctAnswer;
+            }
+            
+            const options = document.querySelectorAll('.quiz-option');
+            
+            if (isCorrect) {
+                options[index].classList.add('correct');
+                score.correct++;
+            } else {
+                options[index].classList.add('incorrect');
+                
+                // Highlight the correct answer
+                const correctIndex = allAnswers.indexOf(correctAnswer);
+                options[correctIndex].classList.add('correct');
+            }
+            
+            score.total++;
+            updateScore();
+            
+            // Disable further clicks
+            options.forEach(option => {
+                option.onclick = null;
+            });
+            
+            // Move to next question after a delay
+            setTimeout(() => {
+                generateQuestion();
+            }, 2000);
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = `Score: ${score.correct}/${score.total}`;
+        }
+    </script>
+</body>
+</html>
